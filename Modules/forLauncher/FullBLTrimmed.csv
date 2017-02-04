@@ -1,0 +1,60 @@
+"Blacklist operator","DNS blacklist","Zone","Listing goal"
+"WebIron LLC RBL","BABL","babl.rbl.webiron.net","Lists IP ranges belonging to officially published abuse addresses that either bounce or request not to receive abuse notices. The aim of this list is to block companies that openly shrug their abuse responsibilities."
+"WebIron LLC RBL","CABL","cabl.rbl.webiron.net","Lists IP ranges belonging to abuse addresses that have failed to handle abuse issues for at least 30 days. The aim of this list is to hold companies accountable for the abuse that originates from their networks rather than just ignoring it."
+"WebIron LLC RBL","STABL","stabl.rbl.webiron.net","Lists single IP addresses recently attacking websites and servers."
+"WebIron LLC RBL","All","all.rbl.webiron.net","Contains IP addresses and ranges from BABL
+"WebIron LLC RBL","Crawler","crawler.rbl.webiron.net","Web Crawler IP lookup used to match user agents with known crawler IP addresses. Data from this list is considered BETA."
+"ARM Research Labs, LLC GBUdb","Truncate","truncate.gbudb.net","NA"
+"invaluement DNSBL","ivmSIP","Paid access via rsync","Single IP addresses which only send UBE. Specializing in snowshoe spam and other "under the radar" spams which evade many other DNSBLs. Has FP-level comparable to Zen."
+"invaluement DNSBL","ivmSIP/24","Paid access via rsync","Lists /24 blocks of IP addresses which usually only send UBE and containing at least several addresses which are confirmed emitters of junk mail. Collateral listings are kept to a minimum because subsections are often carved from /24 listings when spammers and legit senders share the same /24 block."
+"invaluement DNSBL","ivmURI","Paid access via rsync","Comparable to uribl.com and surbl.org
+"UCEPROTECT-Network","UCEPROTECT Level 1","dnsbl-1.uceprotect.net(also free available via rsync [3])","Single IP addresses that send mail to spamtraps"
+"UCEPROTECT-Network","UCEPROTECT Level 2","dnsbl-2.uceprotect.net(also free available via rsync [3])","Allocations with exceeded UCEPROTECT Level 1 listings"
+"UCEPROTECT-Network","UCEPROTECT Level 3","dnsbl-3.uceprotect.net(also free available via rsync [3])","ASN"s with excessive UCEPROTECT Level 1 listings"
+"Spam and Open Relay Blocking System (SORBS)","dnsbl","dnsbl.sorbs.net","Unsolicited bulk/commercial email senders"
+"Spam and Open Relay Blocking System (SORBS)","safe.dnsbl","safe.dnsbl.sorbs.net","Unsolicited bulk/commercial email senders"
+"Spam and Open Relay Blocking System (SORBS)","http.dnsbl","http.dnsbl.sorbs.net","Open HTTP proxy servers"
+"Spam and Open Relay Blocking System (SORBS)","socks.dnsbl","socks.dnsbl.sorbs.net","Open SOCKS proxy servers"
+"Spam and Open Relay Blocking System (SORBS)","misc.dnsbl","misc.dnsbl.sorbs.net","Additional proxy servers"
+"Spam and Open Relay Blocking System (SORBS)","smtp.dnsbl","smtp.dnsbl.sorbs.net","Open SMTP relay servers"
+"Spam and Open Relay Blocking System (SORBS)","web.dnsbl","web.dnsbl.sorbs.net","IP addresses with vulnerabilities that are exploitable by spammers (e.g. FormMail scripts)"
+"Spam and Open Relay Blocking System (SORBS)","new.spam.dnsbl","new.spam.dnsbl.sorbs.net","Hosts that have sent spam to the admins of SORBS in the last 48 hours"
+"Spam and Open Relay Blocking System (SORBS)","recent.spam.dnsbl","recent.spam.dnsbl.sorbs.net","Hosts that have sent spam to the admins of SORBS in the last 28 days"
+"Spam and Open Relay Blocking System (SORBS)","old.spam.dnsbl","old.spam.dnsbl.sorbs.net","Hosts that have sent spam to the admins of SORBS in the last year"
+"Spam and Open Relay Blocking System (SORBS)","spam.dnsbl","spam.dnsbl.sorbs.net","Hosts that have allegedly sent spam to the admins of SORBS at any time"
+"Spam and Open Relay Blocking System (SORBS)","escalations.dnsbl","escalations.dnsbl.sorbs.net","Netblocks of service providers believed to support spammers"
+"Spam and Open Relay Blocking System (SORBS)","block.dnsbl","block.dnsbl.sorbs.net","Hosts demanding that they never be tested"
+"Spam and Open Relay Blocking System (SORBS)","zombie.dnsbl","zombie.dnsbl.sorbs.net","Hijacked networks"
+"Spam and Open Relay Blocking System (SORBS)","dul.dnsbl","dul.dnsbl.sorbs.net","Dynamic IP address ranges"
+"Spam and Open Relay Blocking System (SORBS)","rhsbl","rhsbl.sorbs.net","Aggregate RHS zones"
+"Spam and Open Relay Blocking System (SORBS)","badconf.rhsbl","badconf.rhsbl.sorbs.net","Domains with invalid A or MX records in DNS"
+"Spam and Open Relay Blocking System (SORBS)","nomail.rhsbl","nomail.rhsbl.sorbs.net","Domains which the owners have confirmed will not be used for sending email"
+"Spamhaus","SBL Advisory","sbl.spamhaus.org","Verified sources of spam
+"Spamhaus","XBL Advisory","xbl.spamhaus.org","Illegal third-party exploits (e.g. open proxies
+"Spamhaus","PBL Advisory","pbl.spamhaus.org","Addresses not meant to be initiating SMTP connections
+"Spamhaus","SBL+XBL","sbl-xbl.spamhaus.org","A single lookup for querying the SBL and XBL databases"
+"Spamhaus","Zen","zen.spamhaus.org","A single lookup for querying the SBL
+"Composite Blocking List","CBL","cbl.abuseat.org(also free available rsync access, on request see FAQ [7])"
+"IBM DNS Blacklist","Cobion","dnsbl.cobion.com","NA"
+"Passive Spam Block List","PSBL","psbl.surriel.com(also free available via rsync [1])","IP addresses used to send spam to trap"
+"DNSRBL - DNS Real-time Blackhole List","DNSRBL","dnsrbl.org","IP addresses used to send spam to trap"
+"Weighted Private Block List","WPBL","db.wpbl.info","IP addresses used to send UBE to members"
+"Protected Sky RBL","RBL","bad.psky.me","IP Reputation based. Seems to be proprietary."
+"SpamCop Blocking List","SCBL","bl.spamcop.net","IP addresses which have been used to transmit reported email to SpamCop users"
+"SpamRats","RATSNOPTR","noptr.spamrats.com","IP addresses detected as abusive at ISP"s using MagicMail Servers
+"SpamRats","RATSDYNA","dyna.spamrats.com","IP addresses detected as abusive at ISP"s using MagicMail Servers
+"SpamRats","RATSSPAM","spam.spamrats.com","IP addresses detected as abusive at ISP"s using MagicMail Servers
+"SpamCannibal","spamcannibal.org","bl.spamcannibal.org","IP addresses and related generic netblocks that have sent spam."
+"Distributed Realtime Blocking List","drand DRBL node","spamtrap.drbl.drand.net","IP addresses used to send spam to traps or members"
+"Junk Email Filter","Hostkarma","hostkarma.junkemailfilter.com","Detects viruses by behavior using fake high MX and tracking non-use of QUIT"
+"Junk Email Filter","Hostkarma","blacklist.hostkarma.com","Detects viruses by behavior using fake high MX and tracking non-use of QUIT"
+"Quorum.to","ip-dnsbl","list.quorum.to. ( or per-subscriber: [id].list.quorum.to. )","Stop spam from hosts that send no legitimate mail (list most non-mail-sending hosts)."
+"Spamanalysis.org","GeoBL","User-defined: [*].geobl.spamanalysis.org","Lists hosts known as being in certain geographic locations."
+"Heise Zeitschriften Verlag GmbH & Co. KG, hosted by manitu GmbH","NiX Spam (nixspam)","ix.dnsbl.manitu.net","NA"
+"inps.de","inps.de-DNSBL","dnsbl.inps.de","Single IP addresses"
+"blocklist.de [2]","dnsbl","bl.blocklist.de","IP-Addresses who Attacks other Server/Honeypots over ssh
+"SRN:SurGATE Reputation Network","SRN","srnblack.surgate.net","Spam sources
+"s5h.net Internet Services","s5h.net","all.s5h.net","Spam sources from email
+"MegaRBL","RBL","rbl.megarbl.net","IP addresses used to send spam to traps"
+"BarracudaCentral","RBL","b.barracudacentral.org","Spam Trap"
+"McAfee (Intel Security)","McAfee","cidr.bl.mcafee.com","McAfee RBL is a composite of a list of IP addresses managed by Intel Security, and blacklists managed by Spamhaus (a third-party RBL). McAfee RBL propagates a host that is listed by Spamhaus."
