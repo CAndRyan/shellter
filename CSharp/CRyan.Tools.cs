@@ -7,18 +7,11 @@ namespace CRyan.Tools {
 	public static class Reverser {
 		public static double ReverseWhileLoop(double num) {
 			double retVal = 0;
-			List<int> digits = new List<int>();
-			int count = 0;
 			
 			do {
-				digits.Add((int)(num % 10));
+				retVal = (retVal * 10) + (num % 10);
 				num = Math.Floor(num / 10);
-				count++;
 			} while (num > 0);
-			
-			for (int i = 0; i < count; i++) {
-				retVal += digits[i] * Math.Pow(10, count - i - 1);
-			}
 			
 			return retVal;
 		}
@@ -27,14 +20,14 @@ namespace CRyan.Tools {
 			Stopwatch sw = Stopwatch.StartNew();
 			double retVal = method(num);
 			sw.Stop();
-			Console.WriteLine(String.Format("Elapsed time: {0}", sw.Elapsed));
+			Console.WriteLine(String.Format("Elapsed time (ms): {0}", sw.Elapsed.TotalMilliseconds));
 			return retVal;
 		}
-		private static double TimeMethod(Func<double, List<int>, double> method, double num) {
+		private static double TimeMethod(Func<double, double, double> method, double num) {
 			Stopwatch sw = Stopwatch.StartNew();
-			double retVal = method(num, new List<int>());
+			double retVal = method(num, 0);
 			sw.Stop();
-			Console.WriteLine(String.Format("Elapsed time: {0}", sw.Elapsed));
+			Console.WriteLine(String.Format("Elapsed time (ms): {0}", sw.Elapsed.TotalMilliseconds));
 			return retVal;
 		}
 		
@@ -42,19 +35,11 @@ namespace CRyan.Tools {
 			return TimeMethod(ReverseWhileLoop, num);
 		}
 		
-		public static double ReverseRecursive(double num, List<int> digits) {
-			digits.Add((int)(num % 10));
+		public static double ReverseRecursive(double num, double build) {
+			build = (build * 10) + (num % 10);
 			num = Math.Floor(num / 10);
 			
-			//if (num > 0) {
-			//	return ReverseRecursive(num, digits);
-			//}
-			//else {
-			//	return digits.Select((digit, index) => digit * Math.Pow(10, digits.Count - index - 1)).Sum();
-			//}
-			
-			return num > 0 ? ReverseRecursive(num, digits) : 
-				digits.Select((digit, index) => digit * Math.Pow(10, digits.Count - index - 1)).Sum();
+			return num > 0 ? ReverseRecursive(num, build) : build;
 		}
 		
 		public static double ReverseRecursiveTimed(double num) {
