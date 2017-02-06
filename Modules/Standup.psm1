@@ -42,10 +42,10 @@ function Add-StandupNote {
 	
 	$date = $null
 	if ($DateString -ne "") {
-		$date = ([DateTime]$DateString).ToString("d")
+		$date = ([DateTime]$DateString)
 	}
 	else {
-		$date = (Get-Date).ToString("d")
+		$date = Get-Date
 	}
 	
 	$dat = Import-StandupXml -Path $Path
@@ -54,7 +54,7 @@ function Add-StandupNote {
 	$curr |Add-Member -MemberType NoteProperty -Name Date -Value $date -PassThru |
 		Add-Member -MemberType NoteProperty -Name Notes -Value (New-Object System.Collections.Generic.List[PSObject])
 	
-	$selected = $dat.Days |Where-Object {$_.Date -eq $date}
+	$selected = $dat.Days |Where-Object {$_.Date.ToString("d") -eq $date.ToString("d")}
 	if ($selected -ne $null) {
 		foreach ($obj in $selected.Notes) {
 			$curr.Notes.Add($obj)
@@ -87,10 +87,10 @@ function Get-StandupNotes {
 	
 	$date = $null
 	if ($DateString -ne "") {
-		$date = ([DateTime]$DateString).ToString("d")
+		$date = ([DateTime]$DateString)
 	}
 	else {
-		$date = (Get-Date).ToString("d")
+		$date = Get-Date
 	}
 	
 	$dat = Import-StandupXml -Path $Path
@@ -99,7 +99,7 @@ function Get-StandupNotes {
 	$curr |Add-Member -MemberType NoteProperty -Name Date -Value $date -PassThru |
 		Add-Member -MemberType NoteProperty -Name Notes -Value (New-Object System.Collections.Generic.List[PSObject])
 	
-	$selected = $dat.Days |Where-Object {$_.Date -eq $date}
+	$selected = $dat.Days |Where-Object {$_.Date.ToString("d") -eq $date.ToString("d")}
 	if ($selected -ne $null) {
 		foreach ($obj in $selected.Notes) {
 			$curr.Notes.Add($obj)
@@ -126,10 +126,10 @@ function Remove-StandupNote {
 	
 	$date = $null
 	if ($DateString -ne "") {
-		$date = ([DateTime]$DateString).ToString("d")
+		$date = ([DateTime]$DateString)
 	}
 	else {
-		$date = (Get-Date).ToString("d")
+		$date = Get-Date
 	}
 	
 	$dat = Import-StandupXml -Path $Path
@@ -138,7 +138,7 @@ function Remove-StandupNote {
 	$curr |Add-Member -MemberType NoteProperty -Name Date -Value $date -PassThru |
 		Add-Member -MemberType NoteProperty -Name Notes -Value (New-Object System.Collections.Generic.List[PSObject])
 	
-	$selected = $dat |Where-Object {$_.Date -eq $date}
+	$selected = $dat.Days |Where-Object {$_.Date.ToString("d") -eq $date.ToString("d")}
 	if ($selected -ne $null) {
 		foreach ($obj in $selected.Notes) {
 			$curr.Notes.Add($obj)
@@ -153,6 +153,6 @@ function Remove-StandupNote {
 		
 		$dat.Days.Add($curr)
 		$dat.Days = $dat.Days |Sort-Object -Property Date
-		$dat.Days |Export-Clixml -Path $Path
+		$dat |Export-Clixml -Path $Path
 	}
 }
