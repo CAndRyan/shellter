@@ -64,7 +64,7 @@ function Add-StandupNote {
 	}
 	
 	$new = New-Object -TypeName PSObject
-	$new |Add-Member -MemberType NoteProperty -Name Id -Value $count -PassThru |
+	$new |Add-Member -MemberType NoteProperty -Name Id -Value $dat.NextId -PassThru |
 		Add-Member -MemberType NoteProperty -Name Note -Value $Note
 	$curr.Notes.Add($new)
 	$dat.Days.Add($curr)
