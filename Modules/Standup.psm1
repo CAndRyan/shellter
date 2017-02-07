@@ -82,11 +82,36 @@ function Get-StandupNotes {
 		
 		[parameter()]
 		[String]
-		$Path = "$env:USERPROFILE\Documents\standup.xml"
+		$Path = "$env:USERPROFILE\Documents\standup.xml",
+		
+		[parameter()]
+		[Switch]
+		$Yesterday,
+		
+		[parameter()]	#Only necessary if using the -Yesterday flag on a Monday and looking to get Sunday - default is Friday...
+		[Switch]
+		$IncludeWeekend,
+		
+		[parameter()]
+		[Switch]
+		$All,
+		
+		[parameter()]	#Used with -All switch to preserve the data structure
+		[Switch]
+		$NoFormat
 	)
 	
 	$date = $null
-	if ($DateString -ne "") {
+	if ($Yesterday) {
+		$today = Get-Date
+		if (($today.DayOfWeek -eq "Monday") -and (-not $IncludeWeekend)) {
+			$date = $today.AddDays(-3)
+		}
+		else {
+			$date = $today.AddDays(-1)
+		}
+	}
+	elseif ($DateString -ne "") {
 		$date = ([DateTime]$DateString)
 	}
 	else {
@@ -95,18 +120,34 @@ function Get-StandupNotes {
 	
 	$dat = Import-StandupXml -Path $Path
 	
-	$curr = New-Object -TypeName PSObject
-	$curr |Add-Member -MemberType NoteProperty -Name Date -Value $date -PassThru |
-		Add-Member -MemberType NoteProperty -Name Notes -Value (New-Object System.Collections.Generic.List[PSObject])
-	
-	$selected = $dat.Days |Where-Object {$_.Date.ToString("d") -eq $date.ToString("d")}
-	if ($selected -ne $null) {
-		foreach ($obj in $selected.Notes) {
-			$curr.Notes.Add($obj)
+	if ($All) {
+		$modded = $dat.Days |
+			ForEach-Object {$tmp = $_.Date; $_.Notes |
+				Foreach-Object {$_ |
+					Add-Member -MemberType NoteProperty -Name Date -Value $tmp -PassThru}} |
+			Select-Object -Property Id, Date, Note
+			
+		if ($NoFormat) {
+			return $modded
+		}
+		else {
+			return $modded |Format-Table -GroupBy Date -Property Id, Note
 		}
 	}
-	
-	return $curr.Notes
+	else {
+		$curr = New-Object -TypeName PSObject
+		$curr |Add-Member -MemberType NoteProperty -Name Date -Value $date -PassThru |
+			Add-Member -MemberType NoteProperty -Name Notes -Value (New-Object System.Collections.Generic.List[PSObject])
+		
+		$selected = $dat.Days |Where-Object {$_.Date.ToString("d") -eq $date.ToString("d")}
+		if ($selected -ne $null) {
+			foreach ($obj in $selected.Notes) {
+				$curr.Notes.Add($obj)
+			}
+		}
+		
+		return $curr.Notes
+	}
 }
 
 function Remove-StandupNote {
