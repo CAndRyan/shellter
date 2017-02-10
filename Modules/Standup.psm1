@@ -13,10 +13,6 @@ function Import-StandupXml {
 		$xml = Import-Clixml -Path $Path
 		foreach ($obj in $xml.Days) {
 			$dat.Days.Add($obj)
-			
-			foreach ($item in $obj.Notes) {
-				$count++
-			}
 		}
 		
 		$dat.NextId = $xml.NextId
@@ -27,7 +23,7 @@ function Import-StandupXml {
 
 function Add-StandupNote {
 	param(
-		[parameter()]
+		[parameter(Mandatory=$true)]
 		[String]
 		$Note,
 		
