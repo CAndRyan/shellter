@@ -8,7 +8,7 @@
 	@FeDate:	November 17th, 2015
 	@LeDate:	November 18th, 2015
 .EXAMPLE
-	Get-CurrentWeather "Portland, OR"
+	Get-WeatherCurrent "Portland, OR"
 	
 	Location      : Portland, OR
 	Station       : Portland - West Hills, Portland, Oregon
@@ -28,11 +28,11 @@
 	This command produces the above output for Portland, OR which includes the weather stations used, time 
 	of measurement, and all the current conditions.
 .LINK
-	Get-ForecastWeather
+	Get-WeatherForecast
 .ROLE
 	Public~h_key~h_inMetric
 #>
-Function Get-CurrentWeather {
+Function Get-WeatherCurrent {
 	Param(
 		[CmdletBinding()]
 		[Parameter(Mandatory=$true,Position=0)]
@@ -40,10 +40,10 @@ Function Get-CurrentWeather {
 		[string]
 		$location,
 		
-		[Parameter(Position=1)]
+		[Parameter(Mandatory=$true,Position=1)]
 		[alias("k")]
 		[string]
-		$key = "a8ac942ff1cad137",
+		$key,
 		
 		[Parameter()]
 		[Switch]
@@ -245,15 +245,15 @@ Function Get-CurrentWeather {
 	@FeDate:	November 18th, 2015
 	@LeDate:	November 19th, 2015
 .EXAMPLE
-	Get-ForecastWeather "Portland, OR"
+	Get-WeatherForecast "Portland, OR"
 	
 	This command 
 .LINK
-	Get-CurrentWeather
+	Get-WeatherCurrent
 .ROLE
 	Public~h_key~h_inMetric
 #>
-Function Get-ForecastWeather {
+Function Get-WeatherForecast {
 	Param(
 		[CmdletBinding()]
 		[Parameter(Mandatory=$true,Position=0)]
@@ -261,10 +261,10 @@ Function Get-ForecastWeather {
 		[string]
 		$location,
 		
-		[Parameter(Position=1)]
+		[Parameter(Mandatory=$true,Position=1)]
 		[alias("k")]
 		[string]
-		$key = "a8ac942ff1cad137",
+		$key,
 		
 		[Parameter()]
 		[Switch]
