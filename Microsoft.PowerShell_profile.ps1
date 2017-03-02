@@ -34,6 +34,9 @@ function Get-MapModules {
 function Get-WorkToHome {
 	#
 }
+function Open-WallpapersWin10 {
+	& control /name Microsoft.Personalization /page pageWallpaper
+}
 #function Start-NotepadPP {
 #	Start-AndMapProcess -Path "C:\Program Files (x86)\notepad++\notepad++.exe"
 #}
