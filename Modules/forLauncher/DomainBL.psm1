@@ -18,10 +18,11 @@ Function Test-DomainBlacklisting {
 		[string]
 		$Domain,
 		
-		[Parameter(Position=1)]
+		# Path to FullBLTrimmed csv file
+		[Parameter(Mandatory=$true,Position=1)]
 		[alias("f")]
 		[string]
-		$File="C:\Users\Chris Ryan\Google Drive\KeepSynced\PSProjects\forLauncher\FullBLTrimmed.csv"
+		$File
 	)
 	$reverseIp = ""
 	$ipRegex = "(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})"

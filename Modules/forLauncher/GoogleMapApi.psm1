@@ -42,16 +42,16 @@ Function Get-TravelDirection {
 		[string]
 		$destination,
 		
-		[Parameter(Position=2)]
+		[Parameter(Mandatory=$true,Position=2)]
+		[alias("k")]
+		[string]
+		$key = "",
+		
+		[Parameter(Position=3)]
 		[ValidateSet("driving","bicycling","walking","transit")]
 		[alias("m")]
 		[string]
 		$mode = "driving",
-		
-		[Parameter(Position=3)]
-		[alias("k")]
-		[string]
-		$key = "AIzaSyAFzX0BvF_GLqC8W6Mb4pEZ582Um6JdCCQ",
 		
 		[Parameter()]
 		[Switch]
