@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Drawing;
 
 namespace CRyan.Tools {
 	public static class Reverser {
@@ -44,6 +45,28 @@ namespace CRyan.Tools {
 		
 		public static double ReverseRecursiveTimed(double num) {
 			return TimeMethod(ReverseRecursive, num);
+		}
+	}
+
+	public static class Imager {
+		public static Bitmap ResizeImage(Bitmap imgToResize, int width, int height) {
+			return new Bitmap(imgToResize, width, height);
+		}
+
+		public static void ResizeImage(string inFile, string outFile, int width, int height) {
+			Bitmap img = new Bitmap(inFile);
+			img = ResizeImage(img, width, height);
+			img.Save(outFile);
+		}
+
+		public static Size GetImageSize(string inFile) {
+			Bitmap img = new Bitmap(inFile);
+			return new Size(img.Width, img.Height);
+		}
+
+		public static string GetImageSizeAsString(string inFile) {
+			Size size = GetImageSize(inFile);
+			return String.Format("Width: {0} --- Height: {1}", size.Width, size.Height);
 		}
 	}
 }
