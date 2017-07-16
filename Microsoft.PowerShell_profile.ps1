@@ -37,6 +37,10 @@ function Get-WorkToHome {
 function Open-WallpapersWin10 {
 	& control /name Microsoft.Personalization /page pageWallpaper
 }
+function Get-PiHoleStats {
+	$json = Invoke-RestMethod -Method GET -Uri http://pi.hole/admin/api.php
+	return $json
+}
 #function Start-NotepadPP {
 #	Start-AndMapProcess -Path "C:\Program Files (x86)\notepad++\notepad++.exe"
 #}
