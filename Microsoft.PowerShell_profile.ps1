@@ -41,6 +41,10 @@ function Get-PiHoleStats {
 	$json = Invoke-RestMethod -Method GET -Uri http://pi.hole/admin/api.php
 	return $json
 }
+function Start-SandboxProgram {
+	param([parameter(Mandatory=$true)][String]$Path)
+	& "C:\Program Files\Sandboxie\Start.exe" $Path
+}
 #function Start-NotepadPP {
 #	Start-AndMapProcess -Path "C:\Program Files (x86)\notepad++\notepad++.exe"
 #}
@@ -53,6 +57,7 @@ Set-Alias -Name "getd" -Value Get-FromMapPath
 Set-Alias -Name "getm" -Value Get-MapModules
 Set-Alias -Name "getc" -Value Get-FromMapModulesCommands
 Set-Alias -Name "pow" -Value powershell.exe
+Set-Alias -Name "sand" -Value Start-SandboxProgram
 #*** DEFINE ALIASES ***
 
 #*** EXECUTE FUNCTIONS ***
