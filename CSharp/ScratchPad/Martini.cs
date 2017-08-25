@@ -26,9 +26,9 @@ namespace ScratchPad {
 				for (int i = 0; i < args.Length; i++) {
 					int val;
 					if (Int32.TryParse(args[i], out val)) {
-						Console.WriteLine("Martini (size: {0}, method: {1}):", val.ToString(), MethodName);
+						Console.WriteLine("Martini (size: {0}, method: {1}):", val, MethodName);
 						if (!Print(val)) {
-							Console.Error.WriteLine("Invalid input: '{0}'", val.ToString());
+							Console.Error.WriteLine("Invalid input: '{0}'", val);
 						}
 					}
 					else {
@@ -40,7 +40,8 @@ namespace ScratchPad {
 			private bool Print(int size) {
 				switch (Method) {
 					case MartiniMethod.Performant:
-						throw new NotImplementedException("No method has yet been determined as 'most performant'");
+						//throw new NotImplementedException("No method has yet been determined as 'most performant'");
+						return PrintGlassSlick(size);
 					case MartiniMethod.Slick:
 						return PrintGlassSlick(size);
 					case MartiniMethod.Modified:
@@ -53,24 +54,6 @@ namespace ScratchPad {
 						return false;
 				}
 			}
-
-			// public static bool PrintGlass(int size) {
-			// 	if (size < 1) { return false; }
-				
-			// 	StringBuilder sb = new StringBuilder();
-			// 	int maxWidth = size * 2 - 1;
-			// 	int mid = (maxWidth - 1) / 2;
-				
-			// 	for (int i = 0; i < maxWidth; i = i + 2) {
-			// 		Console.WriteLine(new String(' ', i / 2) + new String('0', maxWidth - i));
-			// 		sb.AppendLine(new String(' ', mid) + '|');
-			// 	}
-				
-			// 	sb.AppendLine(new String('=', maxWidth));
-			// 	Console.WriteLine(sb.ToString());
-
-			// 	return true;
-			// }
 
 			/// <summary>
 			/// Print a martini glass to the console --- 1 StringBuilder
