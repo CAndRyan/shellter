@@ -10,8 +10,8 @@ function Test-FilesForString {
 	)
 	BEGIN {
 		$repoPath = $(Resolve-Path $(Join-Path $GitHooksPath "..\..\")).Path
-		$packagePath = Join-Path $repoPath "IRIS.Web\packages"
-		$appPath = Join-Path $repoPath "IRIS.Web\iris-app\app"
+		$packagePath = Join-Path $repoPath "packages"
+		$appPath = Join-Path $repoPath "app"
 	}
 	PROCESS {
 		$matches = $(Get-ChildItem -Path $packagePath, $appPath -Include *.js -Recurse |
