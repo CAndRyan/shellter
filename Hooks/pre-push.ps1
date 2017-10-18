@@ -1,6 +1,14 @@
 #
 
-$dir = $("c:" + ("$($args[0])".Substring(2) -replace "/", "\"))
+$dir = $null
+try {
+	$split = $args[0].Split(":")
+	$dir = $($split[0] + ":" + ($split[1] -replace "/", "\"))
+}
+catch {
+	Write-Error -Message "Invalid argument: $($args[0])"
+	Exit 101
+}
 
 function Test-FilesForString {
 	param(
