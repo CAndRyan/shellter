@@ -4,7 +4,7 @@ $warnings = New-Object System.Collections.Generic.List[String]
 #*** IMPORT MODULES ***
 $global:MapModules = @{}
 $modules = (	# load with some exclusions (in .txt file)
-	".\Modules"
+	"$env:USERPROFILE\Documents\PowerShell\Modules"
 )
 foreach ($path in $modules) {
 	$exclude = (Get-Content -Path (Join-Path $path "exclude.txt") -EA silentlycontinue) -join ", "
