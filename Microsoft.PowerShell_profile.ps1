@@ -1,4 +1,4 @@
-Set-Location "$env:USERPROFILE\Documents\PowerShell"
+#Set-Location "$env:USERPROFILE\Documents\PowerShell"
 $warnings = New-Object System.Collections.Generic.List[String]
 
 #*** IMPORT MODULES ***
@@ -58,6 +58,7 @@ Set-Alias -Name "getm" -Value Get-MapModules
 Set-Alias -Name "getc" -Value Get-FromMapModulesCommands
 Set-Alias -Name "pow" -Value powershell.exe
 Set-Alias -Name "sand" -Value Start-SandboxProgram
+Set-Alias -name "vsc" -Value "code-insiders.cmd"
 #*** DEFINE ALIASES ***
 
 #*** EXECUTE FUNCTIONS ***
