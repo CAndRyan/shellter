@@ -203,10 +203,10 @@ function Set-ShellWindow {
 	$Title = "PowerShell: " + $Title + " (" + $shellCount + ")"
 	$Shell.WindowTitle = $Title
 	
-	$size = $Shell.BufferSize
-	$size.width = $BufferWidth
-	$size.height = $BufferHeight
-	$Shell.BufferSize = $size
+	#$size = $Shell.BufferSize
+	#$size.width = $BufferWidth
+	#$size.height = $BufferHeight
+	#$Shell.BufferSize = $size
 	$Shell.BackgroundColor = $Background
 	$Shell.ForegroundColor =  $Foreground
 	

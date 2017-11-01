@@ -57,18 +57,16 @@ namespace ScratchPad {
                     TextWriter originalOut = Console.Out;
                     Console.SetOut(TextWriter.Null);
 
-                    for (int i = 0; !hasError && i < 5; i++) {
-                        try {
-                            driver.Main(args);
-                        }
-                        catch (Exception ex) {
-                            Console.SetOut(originalOut);
-                            Console.Error.WriteLine("Error encountered during measure setup: {0}: {1}\n{2}", ex.GetType().FullName, ex.Message, ex.StackTrace);
-                            hasError = true;
-                        }
-                        finally {
-                            if (!hasError) { Console.SetOut(originalOut); }
-                        }
+                    try {
+                        driver.Main(args);
+                    }
+                    catch (Exception ex) {
+                        Console.SetOut(originalOut);
+                        Console.Error.WriteLine("Error encountered during measure setup: {0}: {1}\n{2}", ex.GetType().FullName, ex.Message, ex.StackTrace);
+                        hasError = true;
+                    }
+                    finally {
+                        if (!hasError) { Console.SetOut(originalOut); }
                     }
                 }
                 
