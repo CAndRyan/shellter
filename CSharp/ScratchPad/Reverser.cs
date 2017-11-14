@@ -19,7 +19,7 @@ namespace ScratchPad {
 					double val;
 					if (double.TryParse(args[i], out val)) {
 						Console.WriteLine("Reverser (input: {0}, method: {1}):", val, MethodName);
-						if (!Reverse(val)) {
+						if (Reverse(val) == null) {
 							Console.Error.WriteLine("Invalid input: '{0}'", val);
 						}
 					}
@@ -35,14 +35,14 @@ namespace ScratchPad {
             }
             public Reverser() : this(ReverserMethod.Recursive) { }
 
-            private bool Reverse(int num) {
+            private double? Reverse(double num) {
                 switch (Method) {
                     case ReverserMethod.Recursive:
                         return ReverseRecursive(num, 0.0);
                     case ReverserMethod.While:
                         return ReverseWhileLoop(num);
                     default:
-                        return false;
+                        return null;
                 }
             }
             
@@ -63,6 +63,11 @@ namespace ScratchPad {
                 
                 return num > 0 ? ReverseRecursive(num, build) : build;
             }
+        }
+
+        public enum ReverserMethod {
+            Recursive,
+            While
         }
     }
 }
