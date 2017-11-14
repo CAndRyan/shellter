@@ -43,6 +43,22 @@ namespace ScratchPad {
                             driver = new Martini();
                         }
                         break;
+                    case "reverser":
+                        if (args.Length > 1 && args[1].StartsWith("-")) {
+                            ReverserMethod method;
+                            if (Enum.TryParse(args[1].Replace("-", ""), out method) && Enum.IsDefined(typeof(ReverserMethod), method)) {
+                                driver = new Reverser(method);
+                                args = args.Skip(1).ToArray();
+                            }
+                            else {
+                                Console.Error.WriteLine("Invalid method value: '{0}'", args[1]);
+                                return;
+                            }
+                        }
+                        else {
+                            driver = new Reverser();
+                        }
+                        break;
                     default:
                         Console.Error.WriteLine("Invalid command: '{0}'", args[0]);
                         return;

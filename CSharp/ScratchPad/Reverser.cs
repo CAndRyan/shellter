@@ -17,11 +17,18 @@ namespace ScratchPad {
             public void Main(string[] args) {
 				for (int i = 0; i < args.Length; i++) {
 					double val;
+                    double? retVal = null;
+
 					if (double.TryParse(args[i], out val)) {
 						Console.WriteLine("Reverser (input: {0}, method: {1}):", val, MethodName);
-						if (Reverse(val) == null) {
+                        retVal = Reverse(val);
+
+						if (retVal == null) {
 							Console.Error.WriteLine("Invalid input: '{0}'", val);
 						}
+                        else {
+                            Console.WriteLine("Output: {0}", retVal);
+                        }
 					}
 					else {
 						Console.Error.WriteLine("Invalid input: '{0}'", args[i]);
