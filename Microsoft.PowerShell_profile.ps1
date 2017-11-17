@@ -45,6 +45,26 @@ function Start-SandboxProgram {
 	param([parameter(Mandatory=$true)][String]$Path)
 	& "C:\Program Files\Sandboxie\Start.exe" $Path
 }
+function Set-CurrentShellToMinimized {
+	Get-Process -Id $PID |Set-WindowStyle -Style MINIMIZE
+}
+function Start-GulpBuild {
+	param(
+		[parameter(Mandatory=$true,HelpMessage="Enter a command like: build-debug")][string]$Command,
+		[parameter()][ValidateScript({Test-Path $_ -PathType Container})][string]$Path,
+		[parameter()][switch]$NoWait,
+		[parameter()][switch]$CloseAfter
+	)
+	if ($Path) {
+		$Path = $(Resolve-Path $Path).Path;
+	}
+	else {
+		$Path = $(Get-Location).Path
+	}
+	$cmd = "gulp $Command;"
+	if (-not $CloseAfter) { $cmd += " Write-Host `"Press ENTER to exit...`"; Read-Host;" }
+	Start-Process powershell.exe -ArgumentList "-NoProfile -Command &{ $cmd }" -WorkingDirectory $Path -Wait:$(-not $NoWait)
+}
 #function Start-NotepadPP {
 #	Start-AndMapProcess -Path "C:\Program Files (x86)\notepad++\notepad++.exe"
 #}
@@ -59,11 +79,13 @@ Set-Alias -Name "getc" -Value Get-FromMapModulesCommands
 Set-Alias -Name "pow" -Value powershell.exe
 Set-Alias -Name "sand" -Value Start-SandboxProgram
 Set-Alias -name "vsc" -Value "code-insiders.cmd"
+Set-Alias -Name "min" -Value Set-CurrentShellToMinimized
+Set-Alias -Name "ggulp" -Value Start-GulpBuild
 #*** DEFINE ALIASES ***
 
 #*** EXECUTE FUNCTIONS ***
 Update-MapPath
-Set-ShellWindow -Title "CRyan" -Home
+Set-ShellWindow -Title "Shellter" -Home
 #*** EXECUTE FUNCTIONS ***
 
 #*** DISPLAY WARNINGS ***
