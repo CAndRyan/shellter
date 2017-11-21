@@ -18,11 +18,13 @@ function Test-FilesForString {
 	)
 	BEGIN {
 		$repoPath = $(Resolve-Path $(Join-Path $GitHooksPath "..\..\")).Path
-		$packagePath = Join-Path $repoPath "packages"
-		$appPath = Join-Path $repoPath "app"
+		$searchPaths = @(
+			Join-Path $($repoPath "packages"),
+			Join-Path $($repoPath "app")
+		)
 	}
 	PROCESS {
-		$matches = $(Get-ChildItem -Path $packagePath, $appPath -Include *.js -Recurse |
+		$matches = $(Get-ChildItem -Path $searchPaths -Include *.js -Recurse |
 			Select-String -Pattern "^[\s\t]*[/]{0,1}[\s\t]*debugger;")
 	}
 	END {
