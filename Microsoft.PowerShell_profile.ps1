@@ -56,14 +56,18 @@ function Start-GulpBuild {
 		[parameter()][switch]$CloseAfter
 	)
 	if ($Path) {
-		$Path = $(Resolve-Path $Path).Path;
+		$workingDirectory = $(Resolve-Path $Path).Path;
 	}
 	else {
-		$Path = $(Get-Location).Path
+		$workingDirectory = $(Get-ChildItem -Path $(Get-Location).Path -Filter gulpfile.js -Recurse -EA SilentlyContinue |
+			Select-Object -First 1).Directory.FullName
+		if (-not $workingDirectory) {
+			throw "No gulpfile found in the current directory"
+		}
 	}
-	$cmd = "gulp $Command;"
+	$cmd = "`$host.ui.RawUI.WindowTitle = '$workingDirectory'; Write-Host 'Working Directory: '$workingDirectory''; gulp $Command;"
 	if (-not $CloseAfter) { $cmd += " Write-Host `"Press ENTER to exit...`"; Read-Host;" }
-	Start-Process powershell.exe -ArgumentList "-NoProfile -Command &{ $cmd }" -WorkingDirectory $Path -Wait:$(-not $NoWait)
+	Start-Process powershell.exe -ArgumentList "-NoProfile -Command &{ $cmd }" -WorkingDirectory $workingDirectory -Wait:$(-not $NoWait)
 }
 #function Start-NotepadPP {
 #	Start-AndMapProcess -Path "C:\Program Files (x86)\notepad++\notepad++.exe"

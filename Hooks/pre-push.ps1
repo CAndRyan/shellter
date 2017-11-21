@@ -19,12 +19,26 @@ function Test-FilesForString {
 	BEGIN {
 		$repoPath = $(Resolve-Path $(Join-Path $GitHooksPath "..\..\")).Path
 		$searchPaths = @(
-			Join-Path $($repoPath "packages"),
-			Join-Path $($repoPath "app")
+			$(Join-Path $repoPath "packages"),
+			$(Join-Path $repoPath "apps")
+		)
+		$excludePaths = @(
+			"*node_modules*"
 		)
 	}
 	PROCESS {
-		$matches = $(Get-ChildItem -Path $searchPaths -Include *.js -Recurse |
+		$matches = $(Get-ChildItem -Path $searchPaths -Include *.js -Recurse | ForEach-Object { 
+				$allowed = $true
+				foreach ($exclude in $excludePaths) { 
+					if ((Split-Path $_.FullName -Parent) -like $exclude) { 
+						$allowed = $false
+						break
+					}
+				}
+				if ($allowed) {
+					$_
+				}
+			} |
 			Select-String -Pattern "^[\s\t]*[/]{0,1}[\s\t]*debugger;")
 	}
 	END {
