@@ -69,6 +69,15 @@ function Start-GulpBuild {
 	if (-not $CloseAfter) { $cmd += " Write-Host `"Press ENTER to exit...`"; Read-Host;" }
 	Start-Process powershell.exe -ArgumentList "-NoProfile -Command &{ $cmd }" -WorkingDirectory $workingDirectory -Wait:$(-not $NoWait)
 }
+function Start-MSBuild {
+	param(
+		[parameter(Mandatory=$true)][string]$ProjectFilePath,
+		[parameter()][string]$ExePath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe",
+		[parameter()][string]$Configuration = "Debug",
+		[parameter()][string]$Target = "Rebuild"
+	)
+	& $ExePath "$ProjectFilePath" /t:$Target /p:Configuration=$Configuration
+}
 #function Start-NotepadPP {
 #	Start-AndMapProcess -Path "C:\Program Files (x86)\notepad++\notepad++.exe"
 #}
