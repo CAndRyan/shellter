@@ -78,6 +78,16 @@ function Start-MSBuild {
 	)
 	& $ExePath "$ProjectFilePath" /t:$Target /p:Configuration=$Configuration
 }
+function Test-ShellIsAdmin {
+	return ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+}
+function Stop-PrivelegedProcess {
+	param(
+		[parameter(Mandatory=$true)][string]$Name
+	)
+	If (-NOT $(Test-ShellIsAdmin)) { throw "Requires PowerShell to be running as an Administrator" }
+	Get-Process -Name $Name -EA SilentlyContinue |Stop-Process -Force
+}
 #function Start-NotepadPP {
 #	Start-AndMapProcess -Path "C:\Program Files (x86)\notepad++\notepad++.exe"
 #}
