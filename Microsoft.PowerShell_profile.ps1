@@ -88,6 +88,10 @@ function Stop-PrivelegedProcess {
 	If (-NOT $(Test-ShellIsAdmin)) { throw "Requires PowerShell to be running as an Administrator" }
 	Get-Process -Name $Name -EA SilentlyContinue |Stop-Process -Force
 }
+function Get-GitGraph {
+	$command = "git log --pretty=oneline --graph --decorate --all"
+	Invoke-Expression $command
+}
 #function Start-NotepadPP {
 #	Start-AndMapProcess -Path "C:\Program Files (x86)\notepad++\notepad++.exe"
 #}
