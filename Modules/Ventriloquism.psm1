@@ -10,5 +10,13 @@ Function Invoke-ThrowCommand {
         $Location
     )
 
-    #
+    Push-Location $Location
+
+    try {
+        Invoke-Command -ScriptBlock $Command
+    } catch {
+        throw $_
+    } finally {
+        Pop-Location
+    }
 }
