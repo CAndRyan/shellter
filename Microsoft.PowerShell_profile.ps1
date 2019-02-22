@@ -108,6 +108,7 @@ Set-Alias -Name "sand" -Value Start-SandboxProgram
 Set-Alias -name "vsc" -Value "code-insiders.cmd"
 Set-Alias -Name "min" -Value Set-CurrentShellToMinimized
 Set-Alias -Name "ggulp" -Value Start-GulpBuild
+Set-Alias -Name "ithrow" -Value Invoke-ThrowCommand
 #*** DEFINE ALIASES ***
 
 #*** EXECUTE FUNCTIONS ***
