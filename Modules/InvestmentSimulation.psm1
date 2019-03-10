@@ -6,7 +6,7 @@ function Get-InvestmentSimulation {
     param (
         [Parameter(
             Mandatory=$true,
-            HelpMessage="The initial investment balance (at beginning of initial year)"
+            HelpMessage="The initial investment balance"
         )]
         [decimal]
         $InitialBalance,
@@ -121,5 +121,110 @@ function Get-InvestmentSimulation {
         $simulation.TotalInterest = [System.Math]::Round($simulation.TotalInterest, 2)
 
 		return $simulation
+    }
+}
+
+function Find-DesiredInvestmentContribution {
+    param (
+        [Parameter(
+            Mandatory=$true,
+            HelpMessage="The desired balance at the end of the simulation"
+        )]
+        [decimal]
+        $DesiredBalance,
+
+        [Parameter(
+            Mandatory=$true,
+            HelpMessage="The initial investment balance"
+        )]
+        [decimal]
+        $InitialBalance,
+
+        [Parameter(
+            Mandatory=$true,
+            HelpMessage="The annual interest rate (in %)"
+        )]
+		[decimal]
+		$GrowthRate,
+        
+        [Parameter(
+            Mandatory=$true,
+            HelpMessage="The final day to simulate"
+        )]
+		[DateTime]
+		$EndOfSimulation,
+		
+        [Parameter(
+            Mandatory=$false,
+            HelpMessage="The initial investment day"
+        )]
+		[DateTime]
+		$StartOfSimulation = $(Get-Date),
+
+        [Parameter(
+            Mandatory=$false,
+            HelpMessage="The contribution schedule"
+        )]
+		[ValidateSet("bimonthly", "monthly", "yearly")]
+		[string]
+        $ContributionSchedule = "bimonthly",
+
+		[Parameter(Mandatory=$false)]
+		[ValidateSet("daily", "monthly", "yearly")]
+		[string]
+        $Compounded = "yearly",
+        
+        [Parameter(
+            Mandatory=$false,
+            HelpMessage="The intial contribution to solve from"
+        )]
+        [ValidateScript({$_ -ge 1})]
+        [decimal]
+        $InitialContribution = 100,
+
+        [Parameter(
+            Mandatory=$false,
+            HelpMessage="The amount to change the contribution by each iteration"
+        )]
+        [ValidateScript({$_ -ge 1})]
+        [decimal]
+        $ContributionDelta = 20
+    )
+
+    $simulation = $null
+    $contribution = $InitialContribution
+    $complete = $false
+    $previousBalance = $DesiredBalance
+    $previousSim = $null
+ 
+    do {
+        $simulation = Get-InvestmentSimulation -InitialBalance $InitialBalance `
+            -GrowthRate $GrowthRate `
+            -EndOfSimulation $EndOfSimulation `
+            -StartOfSimulation $StartOfSimulation `
+            -ContributionSchedule $ContributionSchedule `
+            -Compounded $Compounded `
+            -Contribution $contribution
+
+        if (($simulation.FinalBalance -eq $DesiredBalance) -or
+            ($simulation.FinalBalance -lt $DesiredBalance -and $previousBalance -gt $DesiredBalance) -or
+            ($simulation.FinalBalance -gt $DesiredBalance -and $previousBalance -lt $DesiredBalance))
+        {
+            $complete = $true
+            continue
+        } elseif ($simulation.FinalBalance -lt $DesiredBalance) {
+            $contribution += $ContributionDelta
+        } elseif ($simulation.FinalBalance -gt $DesiredBalance) {
+            $contribution -= $ContributionDelta
+        }
+
+        $previousBalance = $simulation.FinalBalance
+        $previousSim = $simulation
+    } while (-not $complete)
+
+    if ($simulation.FinalBalance -lt $DesiredBalance) {
+        return $previousSim
+    } else {
+        return $simulation
     }
 }
