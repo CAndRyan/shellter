@@ -2,46 +2,6 @@
 #
 #
 
-function Get-InvestmentSimulationDefault {
-    param (
-        [Parameter(
-            Mandatory=$true,
-            HelpMessage="The initial investment balance (at beginning of initial year)"
-        )]
-        [decimal]
-        $InitialBalance,
-
-        [Parameter(
-            Mandatory=$true,
-            HelpMessage="The contribution amount per inflow"
-        )]
-        [decimal]
-        $Contribution,
-
-        [Parameter(
-            Mandatory=$true,
-            HelpMessage="The annual interest rate (in %)"
-        )]
-		[decimal]
-		$GrowthRate,
-        
-        [Parameter(
-            Mandatory=$true,
-            HelpMessage="The number of years to simulate"
-        )]
-		[int]
-		$NumberOfYears
-    )
-
-    return Get-InvestmentSimulation -InitialBalance $InitialBalance `
-        -Contribution $Contribution `
-        -GrowthRate $GrowthRate `
-        -StartYear $(Get-Date |Select-Object -ExpandProperty Year) `
-        -NumberOfYears $NumberOfYears `
-        -ContributionSchedule "bimonthly" `
-        -Compounded "daily"
-}
-
 function Get-InvestmentSimulation {
     param (
         [Parameter(
@@ -67,30 +27,30 @@ function Get-InvestmentSimulation {
         
         [Parameter(
             Mandatory=$true,
-            HelpMessage="The initial investment year"
+            HelpMessage="The final day to simulate"
         )]
-		[int]
-		$StartYear,
-
-        [Parameter(
-            Mandatory=$true,
-            HelpMessage="The number of years to simulate"
-        )]
-		[int]
-		$NumberOfYears,
+		[DateTime]
+		$EndOfSimulation,
 		
         [Parameter(
-            Mandatory=$true,
+            Mandatory=$false,
+            HelpMessage="The initial investment day"
+        )]
+		[DateTime]
+		$StartOfSimulation = $(Get-Date),
+
+        [Parameter(
+            Mandatory=$false,
             HelpMessage="The contribution schedule"
         )]
 		[ValidateSet("bimonthly", "monthly", "yearly")]
 		[string]
-        $ContributionSchedule,
+        $ContributionSchedule = "bimonthly",
 
-		[Parameter(Mandatory=$true)]
+		[Parameter(Mandatory=$false)]
 		[ValidateSet("daily", "monthly", "yearly")]
 		[string]
-        $Compounded
+        $Compounded = "yearly"
     )
     BEGIN {
         $evalsPerYear = 0
@@ -110,57 +70,56 @@ function Get-InvestmentSimulation {
 			Add-Member -MemberType NoteProperty -Name ContributionSchedule -Value $ContributionSchedule -PassThru |
 			Add-Member -MemberType NoteProperty -Name CompoundRate -Value $rate -PassThru |
 			Add-Member -MemberType NoteProperty -Name Compounded -Value $Compounded -PassThru |
-			Add-Member -MemberType NoteProperty -Name Schedule -Value $null -PassThru |
-			Add-Member -MemberType NoteProperty -Name FinalBalance -Value 0 -PassThru |
+			Add-Member -MemberType NoteProperty -Name Schedule -Value $(New-Object -TypeName System.Collections.Generic.List[PSCustomObject]) -PassThru |
+			Add-Member -MemberType NoteProperty -Name FinalBalance -Value $InitialBalance -PassThru |
 			Add-Member -MemberType NoteProperty -Name TotalInterest -Value 0 -PassThru |
-			Add-Member -MemberType NoteProperty -Name StartYear -Value $StartYear -PassThru |
-			Add-Member -MemberType NoteProperty -Name FinalYear -Value 0
+			Add-Member -MemberType NoteProperty -Name StartOfSimulation -Value $StartOfSimulation -PassThru |
+			Add-Member -MemberType NoteProperty -Name EndOfSimulation -Value $EndOfSimulation
 		
-		
-		$schedule = New-Object -TypeName System.Collections.Generic.List[PSCustomObject]
-		$balance = $InitialBalance
-		$days = 0
-        $interestAccrued = 0
-        $currentYear = $StartYear
+        $currentDate = $StartOfSimulation
     }
     PROCESS {
-		while ($currentYear -le $MonthlyPayment) {
-			$days++
-			$interest = $rate * $balance
-			$balance = $balance + $interest
-			$interestAccrued = $interestAccrued + $interest
-			
-			if ($days % 30 -eq 0) {
-				$balance = $balance + $Contribution
+		while ($currentDate -le $EndOfSimulation) {
+            $currentDate = $currentDate.AddDays(1)
+            $interest = 0
+            $balanceChanged = $false
+            
+            # Accrue interest
+            if ($Compounded -eq "daily" -or 
+                ($Compounded -eq "monthly" -and $currentDate.Day -eq 1)  -or
+                ($Compounded -eq "yearly" -and $currentDate.Month -eq 1 -and $currentDate.Day -eq 1))
+            {
+                $interest = $rate * $simulation.FinalBalance
+                $simulation.FinalBalance += $interest
+                $simulation.TotalInterest += $interest
+                $balanceChanged = $true
             }
             
-            if ($days % 365 -eq 0) {
-                $currentYear++
-				
+            # Apply contribution
+            if (($ContributionSchedule -eq "yearly" -and $currentDate.Month -eq 1 -and $currentDate.Day -eq 1) -or
+                ($ContributionSchedule -eq "monthly" -and $currentDate.Day -eq 1) -or
+                ($ContributionSchedule -eq "bimonthly" -and ($currentDate.Day -eq 1 -or $currentDate.Day -eq 15)))
+            {
+                $simulation.FinalBalance += $Contribution
+                $balanceChanged = $true
+            }
+            
+            # Update schedule if a change was made
+            if ($balanceChanged) {
 				$obj = New-Object -TypeName PSCustomObject
-                    Add-Member -MemberType NoteProperty -Name Balance -value $balance -PassThru |
-					Add-Member -MemberType NoteProperty -Name Interest -value $interest -PassThru |
-					Add-Member -MemberType NoteProperty -Name Year -value $currentYear
+                $obj |Add-Member -MemberType NoteProperty -Name Balance -value $([System.Math]::Round($simulation.FinalBalance, 2)) -PassThru |
+					Add-Member -MemberType NoteProperty -Name InterestAccrued -value $([System.Math]::Round($interest, 2)) -PassThru |
+					Add-Member -MemberType NoteProperty -Name Contribution -value $Contribution -PassThru |
+					Add-Member -MemberType NoteProperty -Name Date -value $currentDate
 				
-				$schedule.Add($obj)
-				$interest = 0
+				$simulation.Schedule.Add($obj)
             }
 		}
-		
-		$final = New-Object -TypeName PSCustomObject
-		$final |Add-Member -MemberType NoteProperty -Name Principal -value $balance -PassThru |
-			Add-Member -MemberType NoteProperty -Name Interest -value 0 -PassThru |
-			Add-Member -MemberType NoteProperty -Name Balance -value 0 -PassThru |
-			Add-Member -MemberType NoteProperty -Name Day -value $days
-		
-		$schedule.Add($final)
     }
     END {
-        $simulation.FinalBalance = $balance
-		$simulation.TotalInterest = $interestAccrued
-		$simulation.FinalYear = $currentYear
-		$simulation.Schedule = $schedule
-		
+        $simulation.FinalBalance = [System.Math]::Round($simulation.FinalBalance, 2)
+        $simulation.TotalInterest = [System.Math]::Round($simulation.TotalInterest, 2)
+
 		return $simulation
     }
 }
