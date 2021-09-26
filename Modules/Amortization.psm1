@@ -87,3 +87,25 @@ function Get-Amortization {
 		return $amortization
 	}
 }
+
+function Get-AccumulatedValue {
+	param(
+		[Parameter(Mandatory=$true)]
+		[decimal]
+		$PrincipalAmount,
+		
+		[Parameter(Mandatory=$true)]
+		[decimal]
+		$AnnualInterestRate,
+		
+		[Parameter(Mandatory=$true)]
+		[int]
+		$NumberOfYears,
+		
+		[Parameter()]
+		[int]
+		$NumberOfTimesCompoundedPerYear = 365
+	)
+
+	return $PrincipalAmount * [Math]::Pow(1 + ($AnnualInterestRate / $NumberOfTimesCompoundedPerYear), $NumberOfTimesCompoundedPerYear * $NumberOfYears)
+}
