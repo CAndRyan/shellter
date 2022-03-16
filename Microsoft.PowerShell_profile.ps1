@@ -24,6 +24,17 @@ foreach ($path in $modules) {
 #*** IMPORT MODULES ***
 
 #*** CUSTOM FUNCTIONS ***
+function Start-DockerShell {
+	param(
+		[parameter(Mandatory=$true)][string]$ImageName,
+		[parameter(Mandatory=$false)][string]$Command
+	)
+	if ($null -eq $Command -or $command -eq "") {
+		& docker exec -it $ImageName /bin/sh
+	} else {
+		& docker exec -it $ImageName /bin/sh -c "$Command"
+	}
+}		
 function Get-FromMapModulesCommands {
 	param([parameter(Mandatory=$true)][Int]$Index)
 	Get-Command -Module $MapModules[$Index]
