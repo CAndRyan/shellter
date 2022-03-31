@@ -103,6 +103,21 @@ function Get-GitGraph {
 	$command = "git log --pretty=oneline --graph --decorate --all"
 	Invoke-Expression $command
 }
+function Get-SpongebobCase {
+	param(
+		[parameter(Mandatory=$true)][string]$InputString
+	)
+	$output = ""
+	for ($i = 0; $i -lt $InputString.Length; $i++) {
+		$currentChar = $InputString[$i].ToString()
+		if ($i % 2 -eq 1) {
+			$output += $currentChar.ToUpper()
+		} else {
+			$output += $currentChar.ToLower()
+		}
+	}
+	return $output
+}
 #function Start-NotepadPP {
 #	Start-AndMapProcess -Path "C:\Program Files (x86)\notepad++\notepad++.exe"
 #}
