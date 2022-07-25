@@ -89,6 +89,13 @@ function Start-MSBuild {
 	)
 	& $ExePath "$ProjectFilePath" /t:$Target /p:Configuration=$Configuration
 }
+function Reset-Filebeat {
+    Stop-Service "filebeat"
+    Get-ChildItem  "$($env:PROGRAMDATA)\filebeat" |
+		Where-Object { $_.Name -Match "registry*" } |
+		Remove-Item -Force
+    Start-Service "filebeat"
+}
 function Test-ShellIsAdmin {
 	return ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
 }
